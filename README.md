@@ -43,28 +43,31 @@ Skills : Java, SQL, Microsoft Power BI, Visio, Jira, Azure Devops, Adobe Analyti
 <td> Bharat Saini </td>
 <td> Provide a clear and concise SMART goal statement.</td>
 <td>  Present a list of 10 well-articulated questions related to the goal.</td>
-<td>  Report creation using Latex</td>
+<td>  Documentation of goals and questions using Latex.</td>
 </tr>
 
 <td> Tania Sanjid </td>
 <td> Provide a clear and concise SMART goal statement.</td>
 <td>  Present a list of 10 well-articulated questions related to the goal.</td>
-<td>  Report creation using Latex</td>
+<td>  Documentation of goals and questions using Latex.</td>
 </tr>
 
 <td> Hani Sarvanan</td>
 <td>  Provide a discussion on the potential metrics and their relevance to answering the questions.</td>
 <td>  Present a comprehensive use case model with clear definitions and scenarios.</td>
+<td>  Documentation of comprehensive use case scenarios using Latex. </td>
 </tr>
 
 <td> Siva Nagi Reddy Segi Reddy </td>
 <td>  Present a comprehensive use case model with clear definitions and scenarios.</td>
 <td>  Enhance the use case model by incorporating relevant details from the notes.</td>
+<td>  Documentation of comprehensive use case scenarios using Latex. </td>
 </tr>
 
 <td> Deepanshu Sehgal </td>
 <td>  Brief Description of the selected goal</td>
 <td>  Present a comprehensive use case model with clear definitions and scenarios</td>
+<td>  Documentation of brief description and comprehensive use case scenarios using Latex. </td>
 </tr>
 
 </tbody>
