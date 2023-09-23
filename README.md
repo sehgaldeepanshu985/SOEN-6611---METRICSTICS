@@ -36,6 +36,8 @@ Skills : Java, SQL, Microsoft Power BI, Visio, Jira, Azure Devops, Adobe Analyti
 <td><b>Member Name<b></td>
 <td><b>Problem 1<b></td>
 <td><b>Problem 2<b></td>
+<td><b>Report Documentation<b></td>
+
 </td>
 </tr>
 <tr>
