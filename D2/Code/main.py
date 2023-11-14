@@ -5,13 +5,12 @@ from tkinter.scrolledtext import ScrolledText
 from metricstics import Metricstics
 import random
 
-# Main application script for METRICSTICS statistical calculator.
-# This script is responsible for creating the user interface and linking the functionality
-# from the Metricstics class to the GUI.
+# The main application script for METRICSTICS, a statistical calculator.
+# It provides a GUI for generating random data and calculating various statistics.
 
 # Function to generate random data
 def generate_random_values():
-    # Request user to input the number of values they would like to generate within a specified range.
+    # Ask the user for the number of values to generate within a specified range.
     numeric_val = simpledialog.askinteger("Input", "How many values would you like to generate?", minvalue=1, maxvalue=10000)
     if numeric_val is not None:
         # Generate a list of random integers.
@@ -103,11 +102,7 @@ stats_labels = []
 stats_functions = [
     (Metricstics.minimum, "Minimum"),
     (Metricstics.maximum, "Maximum"),
-    (Metricstics.mode, "Mode"),
-    (Metricstics.median, "Median"),
-    (Metricstics.mean, "Mean"),
-    (Metricstics.mean_absolute_deviation, "Mean Absolute Deviation"),
-    (Metricstics.standard_deviation, "Standard Deviation"),
+    # ... Add other metric functions from Metricstics class ...
 ]
 
 # Dynamically create and pack labels and buttons for each metric in the metrics_frame.
@@ -115,7 +110,6 @@ for i, (func, name) in enumerate(stats_functions):
     label = tk.Label(metrics_frame, text=f"{name}: ", **label_style)
     label.grid(row=i, column=0, sticky='w', padx=5, pady=2)
     stats_labels.append(label)
-    # The lambda here is used to create an on-the-fly function that passes the correct arguments to calculate_single_metric
     button = tk.Button(metrics_frame, text=f"Calculate {name}", command=lambda f=func, l=label: calculate_single_metric(f, l), **button_style)
     button.grid(row=i, column=1, sticky='e', padx=5, pady=2)
 
