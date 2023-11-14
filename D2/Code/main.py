@@ -1,68 +1,131 @@
-class Metricstics:
-    def __init__(self, data):
-        if not data:
-            raise ValueError("Data not present.")
-        self.data = self._sort_data(data)
+# main.py
+import tkinter as tk
+from tkinter import simpledialog
+from tkinter.scrolledtext import ScrolledText
+from metricstics import Metricstics
+import random
 
-    def _sort_data(self, data):
-        # Implementing a simple sorting algorithm (Insertion Sort)
-        for i in range(1, len(data)):
-            key = data[i]
-            j = i - 1
-            while j >= 0 and key < data[j]:
-                data[j + 1] = data[j]
-                j -= 1
-            data[j + 1] = key
-        return data
+# Main application script for METRICSTICS statistical calculator.
+# This script is responsible for creating the user interface and linking the functionality
+# from the Metricstics class to the GUI.
 
-    def _sum_data(self, data):
-        # Manually summing the data
-        total = 0
-        for num in data:
-            total += num
-        return total
+# Function to generate random data
+def generate_random_values():
+    # Request user to input the number of values they would like to generate within a specified range.
+    numeric_val = simpledialog.askinteger("Input", "How many values would you like to generate?", minvalue=1, maxvalue=10000)
+    if numeric_val is not None:
+        # Generate a list of random integers.
+        val = [random.randint(0, 1000) for _ in range(numeric_val)]
+        # Clear the current data in the display and show the new random values.
+        data_display.delete('1.0', tk.END)
+        data_display.insert(tk.END, ', '.join(map(str, val)))
 
-    def minimum(self):
-        # The first element of the sorted data is the minimum
-        return self.data[0]
+# Function to calculate and display a single metric
+def calculate_single_metric(metric_function, label):
+    try:
+        # Retrieve data from the display, split by commas and convert to integers.
+        data_str = data_display.get('1.0', tk.END).strip()
+        if not data_str:
+            raise ValueError("No data generated.")
+        data = list(map(int, data_str.split(',')))
+        metrics = Metricstics(data)
+        # Use the metric function passed as an argument to calculate the result.
+        result = metric_function(metrics)
+        # Update the GUI label with the result of the metric calculation.
+        label.config(text=f"{metric_function.__name__.capitalize()}: {result}")
+    except ValueError as e:
+        # If an error occurs, show it in the GUI label.
+        label.config(text=f"Error: {e}. Please enter valid numeric data.")
 
-    def maximum(self):
-        # The last element of the sorted data is the maximum
-        return self.data[-1]
+# Function to calculate and display all metrics
+def calculate_all_metrics():
+    # Retrieve the current data from the display.
+    data_str = data_display.get('1.0', tk.END).strip()
+    if not data_str:
+        # If no data is present, display an error message in each statistic label.
+        for label in stats_labels:
+            label.config(text="Error: No data present. Please generate data first.")
+        return
+    # Iterate over each metric function and associated label to update the statistics.
+    for metric_function, label in zip(stats_functions, stats_labels):
+        calculate_single_metric(metric_function[0], label)
 
-    def mean(self):
-        # Mean is sum of data divided by the number of data points
-        total = self._sum_data(self.data)
-        return total / len(self.data)
+# Function to clear all data and reset all labels
+def func_clear_all():
+    # Clear the text in the data display widget.
+    data_display.delete('1.0', tk.END)
+    # Reset each label to show the metric name without any calculated value.
+    for label in stats_labels:
+        label.config(text=f"{label.cget('text').split(':')[0]}: ")
 
-    def median(self):
-        # Median is the middle value or the average of the two middle values
-        n = len(self.data)
-        mid = n // 2
-        if n % 2 == 0:
-            return (self.data[mid - 1] + self.data[mid]) / 2
-        else:
-            return self.data[mid]
+# Initialize the main window of the application with a title and fixed size.
+root = tk.Tk()
+root.title('METRICSTICS')
+root.geometry('800x600')
 
-    def mode(self):
-        # Mode is the most common data point(s)
-        frequency = {}
-        max_count = 0
-        for num in self.data:
-            frequency[num] = frequency.get(num, 0) + 1
-            if frequency[num] > max_count:
-                max_count = frequency[num]
+# Define styles for buttons, labels, and the data display area.
+button_style = {'font': ('Arial', 12), 'bg': '#D3D3D3', 'fg': 'black', 'padx': 10, 'pady': 5}
+label_style = {'font': ('Arial', 12), 'bg': '#f0f0f0', 'fg': 'black'}
+data_display_style = {'font': ('Consolas', 10), 'bg': '#fff', 'fg': 'black'}
 
-        return {num for num, freq in frequency.items() if freq == max_count}
+# Create and pack the main frame to hold all other widgets.
+main_frame = tk.Frame(root, bg='#f0f0f0')
+main_frame.pack(expand=True, fill='both', padx=20, pady=20)
 
-    def mean_absolute_deviation(self):
-        # Mean Absolute Deviation is the average of absolute differences between each data point and the mean
-        mean_value = self.mean()
-        total_deviation = sum(abs(x - mean_value) for x in self.data)
-        return total_deviation / len(self.data)
+# Create and pack a label as the heading of the application.
+heading_label = tk.Label(main_frame, text="Welcome to METRICSTICS: A Statistical Calculator", **label_style)
+heading_label.pack(pady=(0, 20))
 
-    def standard_deviation(self):
-        # Standard Deviation is the square root of the average of squared differences from the Mean
-        mean_value = self.mean()
-        sum_of_squares = sum((x - mean_value) ** 2 for x in self.data)
-        return (sum_of_squares / len(self.data)) ** 0.5
+# Create and pack the ScrolledText widget for displaying generated data.
+data_display = ScrolledText(main_frame, height=10, width=70, **data_display_style)
+data_display.pack(pady=(0, 20))
+
+# Frame to hold action buttons like 'Generate Data', 'Calculate All Metrics', 'Clear All'.
+buttons_frame = tk.Frame(main_frame, bg='#f0f0f0')
+buttons_frame.pack(pady=(0, 10))
+
+# Create and pack buttons within the buttons_frame.
+generate_button = tk.Button(buttons_frame, text='Generate Data', command=generate_random_values, **button_style)
+generate_button.pack(side=tk.LEFT, padx=5)
+
+calculate_all_button = tk.Button(buttons_frame, text='Calculate All Metrics', command=calculate_all_metrics, **button_style)
+calculate_all_button.pack(side=tk.LEFT, padx=5)
+
+clear_all_button = tk.Button(buttons_frame, text='Clear All', command=func_clear_all, **button_style)
+clear_all_button.pack(side=tk.LEFT, padx=5)
+
+# Frame to display metrics labels and buttons for individual metric calculations.
+metrics_frame = tk.Frame(main_frame, bg='#f0f0f0')
+metrics_frame.pack(fill='x', expand=True)
+
+# Define the statistical functions and corresponding labels.
+stats_labels = []
+stats_functions = [
+    (Metricstics.minimum, "Minimum"),
+    (Metricstics.maximum, "Maximum"),
+    (Metricstics.mode, "Mode"),
+    (Metricstics.median, "Median"),
+    (Metricstics.mean, "Mean"),
+    (Metricstics.mean_absolute_deviation, "Mean Absolute Deviation"),
+    (Metricstics.standard_deviation, "Standard Deviation"),
+]
+
+# Dynamically create and pack labels and buttons for each metric in the metrics_frame.
+for i, (func, name) in enumerate(stats_functions):
+    label = tk.Label(metrics_frame, text=f"{name}: ", **label_style)
+    label.grid(row=i, column=0, sticky='w', padx=5, pady=2)
+    stats_labels.append(label)
+    # The lambda here is used to create an on-the-fly function that passes the correct arguments to calculate_single_metric
+    button = tk.Button(metrics_frame, text=f"Calculate {name}", command=lambda f=func, l=label: calculate_single_metric(f, l), **button_style)
+    button.grid(row=i, column=1, sticky='e', padx=5, pady=2)
+
+# Footer frame for the application's bottom, displaying a label with the team name.
+footer_frame = tk.Frame(root, bg='#ddd', height=30)
+footer_frame.pack(side=tk.BOTTOM, fill=tk.X)
+footer_frame.pack_propagate(False)
+
+footer_label = tk.Label(footer_frame, text="By Team N", font=('Arial', 10), bg='#ddd', fg='black')
+footer_label.pack()
+
+# Start the main loop to run the application.
+root.mainloop()
