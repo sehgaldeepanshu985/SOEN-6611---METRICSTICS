@@ -73,6 +73,16 @@ def show_status_message(message):
     """
     status_var.set(message)
 
+def upload_file():
+    file_path = filedialog.askopenfilename(filetypes=[("Text files", "*.txt"), ("CSV files", "*.csv")])
+    if file_path:
+        try:
+            with open(file_path, 'r') as file:
+                file_data = file.read()
+            process_file_data(file_data)
+        except Exception as e:
+            show_error_message(f"Error reading file: {e}")
+
 # Main application functions that perform calculations and manage the data
 
 def generate_random_values():
