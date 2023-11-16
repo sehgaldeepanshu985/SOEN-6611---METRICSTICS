@@ -23,8 +23,8 @@ def ask_for_number_of_values():
 
 def generate_values(numeric_val):
     """
-    Generates a specified number of random values and updates the data display.
-    """
+        Generates a specified number of random values and updates the data display.
+        """
     val = [random.randint(0, 1000) for _ in range(numeric_val)]
     update_data_display(val)
     show_status_message(f"{numeric_val} values generated.")
