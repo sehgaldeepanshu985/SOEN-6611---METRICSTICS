@@ -93,6 +93,8 @@ class Metricstics:
         """
         Calculate and return the standard deviation of the data.
         """
+        if len(self.data) <= 1:
+            raise ValueError("Standard deviation cannot be calculated with less than two values.")
         mean_val = self.mean()
         variance = self._manual_sum((x - mean_val) ** 2 for x in self.data) / len(self.data)
         return self._sqrt(variance)
