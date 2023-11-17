@@ -97,6 +97,20 @@ def save_session_data():
     with open('session_data.txt', 'w') as file:
         file.write(data + '\n' + '\n'.join(metrics))
 
+def load_session_data():
+    try:
+        with open('session_data.txt', 'r') as file:
+            lines = file.readlines()
+        data = lines[0].strip()
+        metrics = lines[1:]
+        update_data_display(data.split(','))
+        for label, metric in zip(stats_labels, metrics):
+            label.config(text=metric.strip())
+    except FileNotFoundError:
+        pass  # If there is No previous session data available
+    except IndexError:
+        pass  # To Handle the case if file format is not as expected
+        
 # Main application functions that perform calculations and manage the data
 
 def generate_random_values():
@@ -216,5 +230,7 @@ footer_frame.pack(side=tk.BOTTOM, fill=tk.X)  # Pack to the bottom of the window
 footer_frame.pack_propagate(False)  # Prevent the frame from shrinking to fit its contents
 footer_label = tk.Label(footer_frame, text="By Team N", font=('Arial', 14), bg='#ddd', fg='black')
 footer_label.pack(pady=10)  # Increase the padding for a bigger label and center it vertically
+
+load_session_data()  # To load the previous session data
 
 root.mainloop()
