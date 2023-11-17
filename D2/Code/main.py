@@ -91,9 +91,17 @@ def process_file_data(file_data):
     except ValueError:
         show_error_message("Please ensure the file contains only numeric data separated by commas or new lines.")
 
+def get_display_data():
+    # Retrieve and return data from the display widget
+    return data_display.get('1.0', tk.END).strip()
+
+def get_metrics():
+    # Extract and return metrics from labels
+    return [label.cget("text") for label in stats_labels]
+    
 def save_session_data():
-    data = data_display.get('1.0', tk.END).strip()
-    metrics = [label.cget("text") for label in stats_labels]
+    data = get_display_data()
+    metrics = get_metrics()
     with open('session_data.txt', 'w') as file:
         file.write(data + '\n' + '\n'.join(metrics))
 
